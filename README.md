@@ -14,14 +14,16 @@ In the google form, there are data as:
 
 * 信息题目及享受的点 -- the title of the message and what you have enjoyed. 
 
-The post processing tools is basically fetch the data and calculate the number of pages that each user read, then push the summary information back to google drive by creating a worksheet in the same google spreadsheet. 
+The post processing tools is basically fetch the data and calculate the number of pages that each user read, then push the summary information back to google drive by creating a worksheet in the same google spreadsheet. The summary information contains the number of pages each user read in each month of the current year. 
 
-To enable this I have perform the following work to
+To enable this I have performed the following work to
 
 * Enabling Google Drive API and creating a crediencial following the example. 
 https://towardsdatascience.com/accessing-google-spreadsheet-data-using-python-90a5bc214fd2
 
 * Install google API python library 
 $ pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+The whole project was created for tracking the reading of "Collective Work of Witness Lee". https://www.livingstream.com/en/33-collected-works-of-witness-lee. But it could be easily generalized to other 
 
 
