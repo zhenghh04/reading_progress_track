@@ -2,7 +2,7 @@
 
 The goal of this project is to track the reading progress. All users fill a google form. And the data is submitted to a google sheet. We then run the local post-processing code to analyze the data and then push it back to the google sheet. 
 
-In the google form, there are data as:
+The data we collect from the users have the following fields: 
 
 * 您的姓名 -- Name (e.g., 张三)
 
@@ -24,6 +24,13 @@ https://towardsdatascience.com/accessing-google-spreadsheet-data-using-python-90
 * Install google API python library 
 $ pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
-The whole project was created for tracking the reading of "Collective Work of Witness Lee". https://www.livingstream.com/en/33-collected-works-of-witness-lee. But it could be easily generalized to other 
+The whole project was created for tracking the reading of "Collective Work of Witness Lee". https://www.livingstream.com/en/33-collected-works-of-witness-lee. But it could be easily generalized to other form tracking or data processing based on Google Drive. 
+
+I execute the python script periodically to update the data. The way I do this is as follows (on Mac OSX)
+
+$ crontab -e 
+and put the following line: 
+0 * * * * progress_update.py 
+
 
 
