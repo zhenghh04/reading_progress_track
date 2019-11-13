@@ -31,6 +31,3 @@ I execute the python script periodically to update the data. The way I do this i
 $ crontab -e 
 and put the following line: 
 0 * * * * progress_update.py 
-
-
-

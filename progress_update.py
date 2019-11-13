@@ -67,7 +67,8 @@ class Progress:
         self.getRemote(self.sheet)
         record = {}
         today = datetime.today()
-        readers = self.getReaders()
+        readers = sorted(self.getReaders())
+
         for u in readers:
             record[u]=[]
         y = today.year
@@ -76,6 +77,7 @@ class Progress:
             r = self.getProgress(select=t, verbose=0)
             for u in readers:
                 record[u].append(r[u])
+        rt = self.getProgress(select="all", verbose=0)
         try:
             worksheet = self.sh.worksheet("%s年每月进度统计"%y)
         except:
@@ -83,16 +85,21 @@ class Progress:
         worksheet.update_cell(1, 1, "%s年每月阅读页数统计(文集总页数逾十万)"%y)
         worksheet.update_cell(2, 1, "最新更新:%s"%today)
         worksheet.update_cell(4, 1, '姓名')
-        worksheet.update_cell(4, 14, '姓名')
+        worksheet.update_cell(4, 16, '姓名')
         for i in range(12):
             worksheet.update_cell(4, 2+i, '%s月'%(i+1))
+
+        worksheet.update_cell(4, 14, '%s年'%(y))
+        worksheet.update_cell(4, 15, '总共')
         r=5
         for u in readers:
             worksheet.update_cell(r, 1, u)
-            worksheet.update_cell(r, 14, u)
+            worksheet.update_cell(r, 16, u)
             for i in range(12):
                 if (record[u][i]!=0):
                      worksheet.update_cell(r, 2+i, record[u][i])
+            worksheet.update_cell(r, 14, sum(record[u][:12]))
+            worksheet.update_cell(r, 15, rt[u])
             r=r+1
 
         return record
