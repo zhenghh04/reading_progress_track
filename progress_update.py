@@ -1,10 +1,11 @@
-#!/usr/bin/env python
+#!/opt/intel/intelpython3/bin/python
 # -*- coding: utf-8 -*- 
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import csv
-from datetime import datetime
+from datetime import date, datetime
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 class Progress:
     def __init__(self, fstr=''):
@@ -24,6 +25,12 @@ class Progress:
             tmp = rec.split('-')
             p += int(tmp[1]) - int(tmp[0])+1
         return p
+    def getChurch(self):
+        self.church={}
+        for u in self.getReaders():
+            dat = self.data[self.data["您的姓名"]==u]
+            self.church[u] = dat["召会 [如: Chicago]"].values[0]
+        return self.church
     def loadCSV(self, fstr):
         self.data=pd.read_csv(fstr)
     def getReaders(self):
@@ -82,31 +89,40 @@ class Progress:
             worksheet = self.sh.worksheet("%s年每月进度统计"%y)
         except:
             worksheet=self.sh.add_worksheet(title="%s年每月进度统计"%y, rows=self.num_readers+1000, cols=20)
+        c = self.getChurch()
+        #print(c)
         worksheet.update_cell(1, 1, "%s年每月阅读页数统计(文集总页数逾十万)"%y)
         worksheet.update_cell(2, 1, "最新更新:%s"%today)
-        worksheet.update_cell(4, 1, '姓名')
-        worksheet.update_cell(4, 16, '姓名')
+        worksheet.update_cell(4, 1, '召会')
+        worksheet.update_cell(4, 2, '姓名')
+        worksheet.update_cell(4, 17, '姓名')
         for i in range(12):
-            worksheet.update_cell(4, 2+i, '%s月'%(i+1))
+            worksheet.update_cell(4, 3+i, '%s月'%(i+1))
 
-        worksheet.update_cell(4, 14, '%s年'%(y))
-        worksheet.update_cell(4, 15, '总共')
+        worksheet.update_cell(4, 15, '%s年'%(y))
+        worksheet.update_cell(4, 16, '总共')
         r=5
         for u in readers:
-            worksheet.update_cell(r, 1, u)
-            worksheet.update_cell(r, 16, u)
+            worksheet.update_cell(r, 1, c[u])
+            worksheet.update_cell(r, 2, u)
+            worksheet.update_cell(r, 17, u)
             for i in range(12):
                 if (record[u][i]!=0):
                      worksheet.update_cell(r, 2+i, record[u][i])
-            worksheet.update_cell(r, 14, sum(record[u][:12]))
-            worksheet.update_cell(r, 15, rt[u])
+            worksheet.update_cell(r, 15, sum(record[u][:12]))
+            worksheet.update_cell(r, 16, rt[u])
             r=r+1
 
         return record
-
+    
 def main():
+    fo = open("update.log", 'a')
     rp = Progress("cwwl-midwest-reading-progress")
     rp.reportProgress()
+    fo.write("updated at ", datetime.today())
+    fo.close()
 
 if __name__=="__main__":
-    main()
+    scheduler = BlockingScheduler()
+    scheduler.add_job(main, 'interval', minutes=1)
+    scheduler.start()
