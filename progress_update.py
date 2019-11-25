@@ -29,12 +29,12 @@ class Progress:
         self.church={}
         for u in self.getReaders():
             dat = self.data[self.data["您的姓名"]==u]
-            self.church[u] = dat["召会 [如: Chicago]"].values[0]
+            self.church[u] = dat["召会 [如: Chicago]"].values[0].strip()
         return self.church
     def loadCSV(self, fstr):
         self.data=pd.read_csv(fstr)
     def getReaders(self):
-        self.readers=list(set(self.data["您的姓名"].values))
+        self.readers=list(set([n.strip() for n in self.data["您的姓名"].values]))
         self.num_readers = len(self.readers)
         return self.readers
     def getRemote(self, sheet=""):
@@ -116,13 +116,11 @@ class Progress:
         return record
     
 def main():
-    fo = open("update.log", 'a')
     rp = Progress("cwwl-midwest-reading-progress")
     rp.reportProgress()
-    fo.write("updated at ", datetime.today())
-    fo.close()
 
 if __name__=="__main__":
-    scheduler = BlockingScheduler()
-    scheduler.add_job(main, 'interval', minutes=1)
-    scheduler.start()
+    main()
+#    scheduler = BlockingScheduler()
+#    scheduler.add_job(main, 'interval', minutes=1)
+#    scheduler.start()
