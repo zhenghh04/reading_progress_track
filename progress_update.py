@@ -7,7 +7,18 @@ import csv
 from datetime import date, datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from time import strptime
+import socket
+host = socket.gethostname()
+if (host=="zion"):
+    js = '/Users/zhenghh/Documents/Christ/CWWL/cwwl-midwest.json'
+else:
+    js = "/home/hzheng/gpfs/Personal/reading_progress_track/cwwl-midwest.json"
 
+def time2int(a):
+    ''' this is to transfer a time XXXX/XX/XX to XXXXXXXX number for comparison'''
+    ay, am, ad = [int(d) for d in a.split("/")]
+    return ay*10000 + am*100 + ad
+    
 class Progress:
     def __init__(self, fstr=''):
         self.data=[]
@@ -24,7 +35,7 @@ class Progress:
         i = 0
         for i in range(n):
             rec = self.data["文集页数 [如: 20-100]"].values[i]
-            if (self.date.values[i]<=t[1]) and (self.date.values[i]>=t[0]) and self.data["您的姓名"][i]==name:
+            if (time2int(self.date.values[i][0])<=time2int(t[1])) and (time2int(self.date.values[i][0])>=time2int(t[0])) and self.data["您的姓名"][i]==name:
                 try:
                     a = int(rec.split('-')[0])
                     tmp = rec.split('-')
@@ -59,7 +70,7 @@ class Progress:
     def getRemote(self, sheet=""):
         scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name('/Users/zhenghh/Documents/Christ/CWWL/cwwl-midwest.json', scope)
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(js, scope)
         gc = gspread.authorize(credentials)
         sh = gc.open(sheet)
         self.sh = sh
