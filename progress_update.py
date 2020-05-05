@@ -126,14 +126,16 @@ class Progress:
         worksheet.update_cell(4, 17, '姓名')
         for i in range(12):
             worksheet.update_cell(4, 3+i, '%s月'%(i+1))
-
+            
         worksheet.update_cell(4, 15, '%s年'%(y))
         worksheet.update_cell(4, 16, '总共')
+        sleep(101)
         r=5
         for u in readers:
             worksheet.update_cell(r, 1, c[u])
             worksheet.update_cell(r, 2, u)
             worksheet.update_cell(r, 17, u)
+            sleep(101)
             for i in range(12):
                 if (record[u][i]!=0):
                      worksheet.update_cell(r, 3+i, record[u][i])
@@ -145,7 +147,7 @@ class Progress:
     
 def main():
     rp = Progress("cwwl-midwest-reading-progress")
-    rp.reportProgress(y=2019)
+#    rp.reportProgress(y=2019)
     rp.reportProgress()
 
 if __name__=="__main__":
