@@ -22,8 +22,9 @@ class Progress:
         p = 0
         n = len(self.data)
         i = 0
-        for rec in self.data["文集页数 [如: 20-100]"].values:
-            if (not self.date.values[i]>t[1]) and (not self.date.values[i]<t[0]) and self.data["您的姓名"][i]==name:
+        for i in range(n):
+            rec = self.data["文集页数 [如: 20-100]"].values[i]
+            if (self.date.values[i]<=t[1]) and (self.date.values[i]>=t[0]) and self.data["您的姓名"][i]==name:
                 try:
                     a = int(rec.split('-')[0])
                     tmp = rec.split('-')
@@ -34,7 +35,6 @@ class Progress:
                     l = strptime(b,'%b').tm_mon
                     r = int(c)+1
                     p += r - l + 1
-            i+=1
         return p
     def getChurch(self):
         self.church={}
@@ -134,7 +134,7 @@ class Progress:
     
 def main():
     rp = Progress("cwwl-midwest-reading-progress")
-    #rp.reportProgress(y=2019)
+    rp.reportProgress(y=2019)
     rp.reportProgress()
 
 if __name__=="__main__":
