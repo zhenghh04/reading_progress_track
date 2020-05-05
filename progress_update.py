@@ -6,6 +6,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import csv
 from datetime import date, datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
+from time import strptime
 
 class Progress:
     def __init__(self, fstr=''):
@@ -23,8 +24,16 @@ class Progress:
         i = 0
         for rec in self.data["文集页数 [如: 20-100]"].values:
             if (not self.date.values[i]>t[1]) and (not self.date.values[i]<t[0]) and self.data["您的姓名"][i]==name:
-                tmp = rec.split('-')
-                p += int(tmp[1]) - int(tmp[0])+1
+                try:
+                    a = int(rec.split('-')[0])
+                    tmp = rec.split('-')
+                    p += int(tmp[1]) - int(tmp[0])+1
+                except:
+                    print("Correcting for %s" %rec)
+                    a, b, c, d = rec.split()
+                    l = strptime(b,'%b').tm_mon
+                    r = int(c)+1
+                    p += r - l + 1
             i+=1
         return p
     def getChurch(self):
