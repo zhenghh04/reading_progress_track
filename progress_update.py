@@ -1,4 +1,4 @@
-#!/opt/intel/intelpython3/bin/python
+#!/soft/compilers/intel-2019/intelpython3/bin/python
 # -*- coding: utf-8 -*- 
 import pandas as pd
 import gspread
@@ -59,7 +59,7 @@ class Progress:
     def getRemote(self, sheet=""):
         scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name('/Users/zhenghh/Documents/Christ/CWWL/cwwl-midwest.json', scope)
+        credentials = ServiceAccountCredentials.from_json_keyfile_name('/home/hzheng/gpfs/Personal/reading_progress_track/cwwl-midwest.json', scope)
         gc = gspread.authorize(credentials)
         sh = gc.open(sheet)
         self.sh = sh
