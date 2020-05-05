@@ -109,7 +109,7 @@ class Progress:
         c = self.getChurch()
         #print(c)
         worksheet.update_cell(1, 1, "%s年每月阅读页数统计(文集总页数逾十万)"%y)
-        worksheet.update_cell(2, 1, "最新更新:%s"%today)
+        worksheet.update_cell(2, 1, "最新更新:%s (每小时更新一次)"%today)
         worksheet.update_cell(4, 1, '召会')
         worksheet.update_cell(4, 2, '姓名')
         worksheet.update_cell(4, 17, '姓名')
