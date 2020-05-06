@@ -6,7 +6,9 @@ from oauth2client.service_account import ServiceAccountCredentials
 import csv
 from datetime import date, datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
-from time import strptime
+from time import strptime, sleep
+from pytz import timezone
+
 import socket
 host = socket.gethostname()
 if (host=="zion"):
@@ -120,7 +122,7 @@ class Progress:
         c = self.getChurch()
         #print(c)
         worksheet.update_cell(1, 1, "%s年每月阅读页数统计(文集总页数逾十万)"%y)
-        worksheet.update_cell(2, 1, "最新更新:%s (每小时更新一次)"%today)
+        worksheet.update_cell(2, 1, "最新更新:%s (每小时更新一次)"%datetime.now(timezone('US/Central')).strftime("%Y-%m-%d %H:%M:%S %Z"))
         worksheet.update_cell(4, 1, '召会')
         worksheet.update_cell(4, 2, '姓名')
         worksheet.update_cell(4, 17, '姓名')
@@ -146,6 +148,7 @@ class Progress:
         return record
     
 def main():
+    print("Collective Word of Witness Lee Reading Challenge")
     rp = Progress("cwwl-midwest-reading-progress")
 #    rp.reportProgress(y=2019)
     rp.reportProgress()
